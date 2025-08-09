@@ -13,18 +13,23 @@ describe('NewComment entities', () => {
 
   it('should throw error when payload not meet data type specification', () => {
     // Arrange
-    const payload1 = {
-      content: 123,
-      parentCommentId: 'comment-123',
-    };
-    const payload2 = {
-      content: 'lorem ipsum',
-      parentCommentId: 123,
-    };
+    const payloads = [
+      {
+        content: 123,
+        parentCommentId: 'comment-123',
+      },
+      {
+        content: 'lorem ipsum',
+        parentCommentId: 123,
+      },
+    ];
 
     // Action & Assert
-    expect(() => new NewComment(payload1)).toThrowError('NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
-    expect(() => new NewComment(payload2)).toThrowError('NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    payloads.forEach((payload) => {
+      expect(() => new NewComment(payload)).toThrowError(
+        'NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION',
+      );
+    });
   });
 
   it('should create NewComment entities correctly', () => {

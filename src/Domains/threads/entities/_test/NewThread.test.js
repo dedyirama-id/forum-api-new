@@ -3,34 +3,35 @@ const NewThread = require('../NewThread');
 describe('NewThread entities', () => {
   it('should throw error when payload not contain needed property', () => {
     // Arrange
-    const payload1 = {
-      owner: 'user-123',
-      body: 'lorem ipsum',
-    };
-    const payload2 = {
-      owner: 'user-123',
-      title: 'new title',
-    };
+    const payloads = [
+      {},
+      { title: 'valid title' },
+      { body: 'valid body' },
+      { title: '', body: 'valid body' },
+      { title: 'valid title', body: '' },
+    ];
 
     // Action & Assert
-    expect(() => new NewThread(payload1)).toThrowError('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
-    expect(() => new NewThread(payload2)).toThrowError('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    payloads.forEach((payload) => {
+      expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    });
   });
 
   it('should throw error when payload not meet data type specification', () => {
     // Arrange
-    const payload1 = {
-      title: true,
-      body: 'lorem ipsum',
-    };
-    const payload2 = {
-      title: 'title',
-      body: 123,
-    };
+    const payloads = [
+      { title: true, body: 'lorem ipsum' },
+      { title: 'title', body: 123 },
+      { title: {}, body: 'ipsum' },
+      { title: 'title', body: [] },
+    ];
 
     // Action & Assert
-    expect(() => new NewThread(payload1)).toThrowError('NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
-    expect(() => new NewThread(payload2)).toThrowError('NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    payloads.forEach((payload) => {
+      expect(() => new NewThread(payload)).toThrowError(
+        'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION',
+      );
+    });
   });
 
   it('should create NewThread entities correctly', () => {

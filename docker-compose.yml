@@ -1,0 +1,12 @@
+services:
+  dicoding-postgres:
+    image: postgres:16
+    ports:
+      - "${PGPORT}:5432"
+    environment:
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      PGDATABASE_TEST: ${PGDATABASE_TEST}
+    volumes:
+      - ./docker/initdb:/docker-entrypoint-initdb.d

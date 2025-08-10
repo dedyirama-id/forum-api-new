@@ -1,3 +1,4 @@
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const NewComment = require('../../../Domains/comments/entities/NewComment');
@@ -16,7 +17,7 @@ describe('AddCommentUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
 
-    mockUserRepository.verifyUserAvailability = jest.fn().mockRejectedValue(new Error());
+    mockUserRepository.verifyUserAvailability = jest.fn().mockRejectedValue(new NotFoundError('user tidak ditemukan'));
     mockCommentRepository.addComment = jest.fn().mockResolvedValue();
 
     const addCommentUseCase = new AddCommentUseCase({
@@ -26,7 +27,7 @@ describe('AddCommentUseCase', () => {
     });
 
     // Action & Assert
-    await expect(addCommentUseCase.execute('thread-123', 'user-123', useCasePayload)).rejects.toThrowError();
+    await expect(addCommentUseCase.execute('thread-123', 'user-123', useCasePayload)).rejects.toThrowError(new NotFoundError('user tidak ditemukan'));
 
     expect(mockUserRepository.verifyUserAvailability).toBeCalledTimes(1);
     expect(mockUserRepository.verifyUserAvailability).toHaveBeenCalledWith('user-123');
@@ -44,7 +45,7 @@ describe('AddCommentUseCase', () => {
     const mockCommentRepository = new CommentRepository();
 
     mockUserRepository.verifyUserAvailability = jest.fn().mockResolvedValue();
-    mockThreadRepository.verifyThreadAvailability = jest.fn().mockRejectedValue(new Error());
+    mockThreadRepository.verifyThreadAvailability = jest.fn().mockRejectedValue(new NotFoundError('thread tidak ditemukan'));
     mockCommentRepository.addComment = jest.fn().mockResolvedValue();
 
     const addCommentUseCase = new AddCommentUseCase({
@@ -54,7 +55,7 @@ describe('AddCommentUseCase', () => {
     });
 
     // Action & Assert
-    await expect(addCommentUseCase.execute('thread-123', 'user-123', useCasePayload)).rejects.toThrowError();
+    await expect(addCommentUseCase.execute('thread-123', 'user-123', useCasePayload)).rejects.toThrowError(new NotFoundError('thread tidak ditemukan'));
 
     expect(mockUserRepository.verifyUserAvailability).toHaveBeenCalledWith('user-123');
     expect(mockThreadRepository.verifyThreadAvailability).toHaveBeenCalledWith('thread-123');
@@ -75,7 +76,7 @@ describe('AddCommentUseCase', () => {
     mockUserRepository.verifyUserAvailability = jest.fn().mockResolvedValue();
     mockThreadRepository.verifyThreadAvailability = jest.fn().mockResolvedValue();
     mockCommentRepository.addComment = jest.fn().mockResolvedValue();
-    mockCommentRepository.verifyCommentAvailability = jest.fn().mockRejectedValue(new Error());
+    mockCommentRepository.verifyCommentAvailability = jest.fn().mockRejectedValue(new NotFoundError('komentar tidak ditemukan'));
 
     const addCommentUseCase = new AddCommentUseCase({
       commentRepository: mockCommentRepository,
@@ -84,7 +85,7 @@ describe('AddCommentUseCase', () => {
     });
 
     // Action & Assert
-    await expect(addCommentUseCase.execute('thread-123', 'user-123', useCasePayload)).rejects.toThrowError();
+    await expect(addCommentUseCase.execute('thread-123', 'user-123', useCasePayload)).rejects.toThrowError(new NotFoundError('komentar tidak ditemukan'));
 
     expect(mockUserRepository.verifyUserAvailability).toHaveBeenCalledWith('user-123');
     expect(mockThreadRepository.verifyThreadAvailability).toHaveBeenCalledWith('thread-123');
@@ -101,12 +102,7 @@ describe('AddCommentUseCase', () => {
       id: 'comment-123',
       content: 'lorem ipsum',
       user_id: 'user-123',
-      thread_id: 'thread-123',
-      parent_comment_id: null,
-      created_at: new Date(),
-      updated_at: new Date(),
       is_delete: false,
-      username: 'dicoding',
     });
 
     const mockUserRepository = new UserRepository();
@@ -132,18 +128,11 @@ describe('AddCommentUseCase', () => {
       id: 'comment-123',
       content: 'lorem ipsum',
       user_id: 'user-123',
-      thread_id: 'thread-123',
-      parent_comment_id: null,
-      created_at: new Date(addedComment.createdAt),
-      updated_at: new Date(addedComment.updatedAt),
       is_delete: false,
-      username: 'dicoding',
     }));
     expect(mockCommentRepository.addComment).toBeCalledTimes(1);
     expect(mockCommentRepository.addComment).toHaveBeenCalledWith('thread-123', 'user-123', new NewComment({
       content: 'lorem ipsum',
-      owner: 'user-123',
-      threadId: 'thread-123',
     }));
     expect(mockUserRepository.verifyUserAvailability).toHaveBeenCalledWith('user-123');
     expect(mockThreadRepository.verifyThreadAvailability).toHaveBeenCalledWith('thread-123');

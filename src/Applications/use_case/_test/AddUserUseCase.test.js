@@ -3,6 +3,7 @@ const RegisteredUser = require('../../../Domains/users/entities/RegisteredUser')
 const UserRepository = require('../../../Domains/users/UserRepository');
 const PasswordHash = require('../../security/PasswordHash');
 const AddUserUseCase = require('../AddUserUseCase');
+const InvariantError = require('../../../Commons/exceptions/InvariantError');
 
 describe('AddUserUseCase', () => {
   it('should orchestrating the add user action correctly', async () => {
@@ -35,19 +36,23 @@ describe('AddUserUseCase', () => {
     const registeredUser = await getUserUseCase.execute(useCasePayload);
 
     // Assert
-    expect(registeredUser).toStrictEqual(new RegisteredUser({
-      id: 'user-123',
-      username: 'dicoding',
-      fullname: 'Dicoding Indonesia',
-    }));
+    expect(registeredUser).toStrictEqual(
+      new RegisteredUser({
+        id: 'user-123',
+        username: 'dicoding',
+        fullname: 'Dicoding Indonesia',
+      }),
+    );
 
     expect(mockUserRepository.verifyAvailableUsername).toBeCalledWith('dicoding');
     expect(mockPasswordHash.hash).toBeCalledWith('secret');
-    expect(mockUserRepository.addUser).toBeCalledWith(new RegisterUser({
-      username: 'dicoding',
-      password: 'encrypted_password',
-      fullname: 'Dicoding Indonesia',
-    }));
+    expect(mockUserRepository.addUser).toBeCalledWith(
+      new RegisterUser({
+        username: 'dicoding',
+        password: 'encrypted_password',
+        fullname: 'Dicoding Indonesia',
+      }),
+    );
     expect(mockUserRepository.addUser).toBeCalledTimes(1);
   });
 
@@ -62,7 +67,9 @@ describe('AddUserUseCase', () => {
     const mockUserRepository = new UserRepository();
     const mockPasswordHash = new PasswordHash();
 
-    mockUserRepository.verifyAvailableUsername = jest.fn().mockRejectedValue(new Error());
+    mockUserRepository.verifyAvailableUsername = jest
+      .fn()
+      .mockRejectedValue(new InvariantError('username tidak tersedia'));
     mockPasswordHash.hash = jest.fn();
 
     const getUserUseCase = new AddUserUseCase({
@@ -71,7 +78,9 @@ describe('AddUserUseCase', () => {
     });
 
     // Action & Assert
-    await expect(getUserUseCase.execute(useCasePayload)).rejects.toThrowError();
+    await expect(getUserUseCase.execute(useCasePayload)).rejects.toThrowError(
+      new InvariantError('username tidak tersedia'),
+    );
     expect(mockUserRepository.verifyAvailableUsername).toBeCalledWith('dicoding');
     expect(mockPasswordHash.hash).not.toBeCalled();
   });

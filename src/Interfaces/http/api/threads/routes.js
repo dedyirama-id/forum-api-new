@@ -46,7 +46,7 @@ const routes = (handler) => ([
   },
   {
     method: 'PUT',
-    path: '/threads/{threadId}/comments/{commentId}/like',
+    path: '/threads/{threadId}/comments/{commentId}/likes',
     handler: handler.putCommentLikeByCommentId,
     options: {
       auth: 'forum_api_jwt',

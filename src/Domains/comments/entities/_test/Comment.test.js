@@ -13,6 +13,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -23,6 +24,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -33,6 +35,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -43,6 +46,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -53,6 +57,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -63,6 +68,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -73,6 +79,7 @@ describe('Comment entities', () => {
         created_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -83,6 +90,17 @@ describe('Comment entities', () => {
         created_at: new Date(),
         updated_at: new Date(),
         username: 'dicoding',
+        like_count: 10,
+      },
+      {
+        id: 'comment-123',
+        content: 'lorem ipsum',
+        user_id: 'user-123',
+        thread_id: 'thread-123',
+        parent_comment_id: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -118,6 +136,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'thread-123',
@@ -129,6 +148,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'thread-123',
@@ -140,6 +160,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'thread-123',
@@ -151,6 +172,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'thread-123',
@@ -162,6 +184,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'thread-123',
@@ -173,6 +196,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -184,6 +208,7 @@ describe('Comment entities', () => {
         updated_at: 123,
         is_delete: false,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -195,6 +220,7 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: 123,
         username: 'dicoding',
+        like_count: 10,
       },
       {
         id: 'comment-123',
@@ -206,6 +232,19 @@ describe('Comment entities', () => {
         updated_at: new Date(),
         is_delete: false,
         username: 123,
+        like_count: 10,
+      },
+      {
+        id: 'comment-123',
+        content: 'lorem ipsum',
+        user_id: 'user-123',
+        thread_id: 'thread-123',
+        parent_comment_id: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        is_delete: false,
+        username: 123,
+        like_count: '10',
       },
     ];
 
@@ -227,6 +266,7 @@ describe('Comment entities', () => {
       updated_at: new Date(),
       is_delete: false,
       username: 'dicoding',
+      like_count: 10,
     };
 
     // Action
@@ -259,6 +299,7 @@ describe('Comment entities', () => {
       updated_at: new Date(),
       is_delete: true,
       username: 'dicoding',
+      like_count: 10,
     };
 
     // Action

@@ -1,3 +1,4 @@
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
@@ -16,7 +17,7 @@ describe('AddThreadUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockUserRepository = new UserRepository();
 
-    mockUserRepository.getUserById = jest.fn().mockRejectedValue(new Error());
+    mockUserRepository.getUserById = jest.fn().mockRejectedValue(new NotFoundError('thread tidak ditemukan'));
     mockThreadRepository.addThread = jest.fn().mockResolvedValue();
 
     const addThreadUseCase = new AddThreadUseCase({
@@ -25,7 +26,7 @@ describe('AddThreadUseCase', () => {
     });
 
     // Action & Assert
-    await expect(addThreadUseCase.execute('invalid-user', useCasePayload)).rejects.toThrowError();
+    await expect(addThreadUseCase.execute('invalid-user', useCasePayload)).rejects.toThrowError(new NotFoundError('thread tidak ditemukan'));
 
     expect(mockUserRepository.getUserById).toHaveBeenCalledWith('invalid-user');
     expect(mockThreadRepository.addThread).not.toBeCalled();
@@ -41,10 +42,6 @@ describe('AddThreadUseCase', () => {
       id: 'thread-123',
       user_id: 'user-123',
       title: useCasePayload.title,
-      body: useCasePayload.body,
-      created_at: new Date(),
-      updated_at: new Date(),
-      username: 'dicoding',
     });
     const mockRegisteredUser = new RegisteredUser({
       id: 'user-123',
@@ -72,11 +69,6 @@ describe('AddThreadUseCase', () => {
       id: 'thread-123',
       user_id: 'user-123',
       title: 'New thread',
-      body: 'lorem ipsum',
-      created_at: new Date(mockThread.createdAt),
-      updated_at: new Date(mockThread.updatedAt),
-      username: 'dicoding',
-
     }));
 
     expect(mockThreadRepository.addThread).toHaveBeenCalledTimes(1);

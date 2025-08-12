@@ -12,18 +12,22 @@ class CommentRepositoryPostgres extends CommentRepository {
   }
 
   async addComment(threadId, userId, newComment) {
-    const {
-      content, parentCommentId,
-    } = newComment;
+    const { content, parentCommentId } = newComment;
     const id = `comment-${this._idGenerator()}`;
 
     const query = {
-      text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5) RETURNING *',
+      text: 'INSERT INTO comments(id, content, user_id, thread_id, parent_comment_id) VALUES($1, $2, $3, $4, $5) RETURNING id, content, user_id, is_delete',
       values: [id, content, userId, threadId, parentCommentId],
     };
-    const result = await this._pool.query(query);
+    const { rows } = await this._pool.query(query);
+    const row = rows[0];
 
-    return new AddedComment(result.rows[0]);
+    return new AddedComment({
+      id: row.id,
+      content: row.content,
+      user_id: row.user_id,
+      is_delete: row.is_delete,
+    });
   }
 
   async getCommentById(id) {
@@ -64,7 +68,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
 
     const result = await this._pool.query(query);
-    const comments = result.rows.map((row) => (new Comment(row)));
+    const comments = result.rows.map((row) => new Comment(row));
 
     return comments;
   }

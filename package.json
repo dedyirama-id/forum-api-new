@@ -9,7 +9,7 @@
     "test": "jest --coverage --setupFiles dotenv/config -i",
     "test:watch:change": "jest --watch --coverage --setupFiles dotenv/config -i",
     "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config -i",
-    "test:postman": "postman collection run 31961267-4abcf62b-d0c2-45b1-b856-cc309e315c10 -e 31961267-8400446f-1d41-447b-b388-e6f9f4754ffb",
+    "test:postman": "postman collection run 31961267-0d032e6a-229e-452b-9c43-668a936d8a0c -e 31961267-0d974ff8-fa80-4403-a193-151a62e5c94e",
     "migrate": "node-pg-migrate",
     "migrate:test": "node-pg-migrate -f config/database/test.json",
     "lint": "eslint .",
